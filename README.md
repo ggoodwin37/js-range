@@ -1,6 +1,8 @@
 js-range
 ========
 
+Run it with 'node index.js'
+
 Build "range tracker" module in javascript. Exposes the following api:
 
 ```
