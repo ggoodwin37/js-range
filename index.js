@@ -37,6 +37,13 @@ function main() {
 	test(++testNum, range.queryRange(98, 100), false);
 
 	range.clear();
+	range.trackRange(20, 40);
+	range.trackRange(50, 70);
+	range.trackRange(80, 100);
+	range.deleteRange(30, 90);
+	test(++testNum, range.list.length, 4);
+
+	range.clear();
 
 	range.trackRange(10, 50);
 	test(++testNum, range.list.length, 2);
