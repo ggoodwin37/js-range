@@ -184,5 +184,4 @@ module.exports = (function() {
 	}
 
 	return jsRange;
-
-});
+})();

@@ -1,5 +1,7 @@
 var jsRange = require('./js-range.js');
 
+main();
+
 function main() {
 	var testNum = 0;
 	var range = new jsRange();
