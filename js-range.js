@@ -5,6 +5,14 @@ module.exports = (function() {
 		this.val = val;
 	}
 
+	listNode.prototype.isStart = function() {
+		return this.type == 'start';
+	}
+
+	listNode.prototype.isEnd = function() {
+		return this.type == 'end';
+	}
+
 	function jsRange() {
 		this.list = [];
 	}
@@ -16,7 +24,7 @@ module.exports = (function() {
 			if (i == this.list.length - 1) {
 				newList.push(this.list[i]);
 			} else {
-				var redundant = (this.list[i].val == this.list[i + 1].val && this.list[i].type == 'end' && this.list[i + 1].type == 'start');
+				var redundant = (this.list[i].val == this.list[i + 1].val && this.list[i].isEnd() && this.list[i + 1].isStart());
 				if (redundant) {
 					i++;  // skip next one (the redundant start) too.
 				} else {
@@ -35,13 +43,13 @@ module.exports = (function() {
 		// consolidate start nodes backwards and end nodes forward
 		for (i = 0; i < this.list.length; ++i) {
 			if (lastType == 'end') {
-				if (this.list[i].type == 'start') {
+				if (this.list[i].isStart()) {
 					newList.push(this.list[i]);
 					lastType = 'start';
 				}
 			} else {
-				if (this.list[i].type == 'end') {
-					if (i == this.list.length - 1 || this.list[i + 1].type == 'start') {
+				if (this.list[i].isEnd()) {
+					if (i == this.list.length - 1 || this.list[i + 1].isStart()) {
 						newList.push(this.list[i]);
 						lastType = 'end';
 					}
@@ -61,9 +69,9 @@ module.exports = (function() {
 				return 1;
 			}
 
-			if (a.type == 'end' && b.type == 'start') {
+			if (a.isEnd() && b.isStart()) {
 				return -1;
-			} else if (a.type == 'start' && b.type == 'end') {
+			} else if (a.isStart() && b.isEnd()) {
 				return 1;
 			}
 			return 0;
@@ -79,7 +87,7 @@ module.exports = (function() {
 	jsRange.prototype.debug = function() {
 		var outStr = '';
 		this.list.forEach(function(thisNode) {
-			if (thisNode.type == 'start') {
+			if (thisNode.isStart()) {
 				outStr += '' + thisNode.val + '..';
 			} else {
 				outStr += '' + thisNode.val + ', ';
@@ -102,7 +110,7 @@ module.exports = (function() {
 		for (i = 0; i < this.list.length; i += 2) {
 			thisStart = this.list[i];
 			thisEnd = this.list[i + 1];
-			if (thisStart.type != 'start' || thisEnd.type != 'end') {
+			if (!thisStart.isStart() || !thisEnd.isEnd()) {
 				console.log('unexpected range marker types during delete, something is Wrong.');
 				return;
 			}
